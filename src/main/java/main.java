@@ -1,28 +1,15 @@
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.opencv.opencv_java;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
-import org.opencv.imgcodecs.Imgcodecs;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class main {
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         Loader.load(opencv_java.class);
 
+        //Khoi tạo 1 cam, nhận ảnh tĩnh vào
+        Fleet_single_cam cam = new Fleet_single_cam("a", "5b8ab6b219c9d6978fd827.jpg", 0.5, 5, 5, 4, false);
 
-        //create fleet cam
-        Fleet_single_cam cam = new Fleet_single_cam("a","5b8ab6b219c9d6978fd827.jpg", 0.5, 5, 5, 4,false);
-
-        //create side_loc
-        Point[] side_loc = new Point[4];
-
-        //create bottom side
-
-
+        //create front side, add 4 đỉnh của side front vào
         cam.add_side("front", new float[][]{
                 new float[]{687, 8},
                 new float[]{1264, 54},
@@ -30,6 +17,7 @@ public class main {
                 new float[]{672, 305}
         });
 
+        //create mặt side, add 4 đỉnh của mặt side vào
         cam.add_side("side", new float[][]{
                 new float[]{12, 132},
                 new float[]{687, 8},
@@ -37,6 +25,7 @@ public class main {
                 new float[]{275, 497}
         });
 
+        //create bottom side, add 4 đỉnh của side bottom vào
         cam.add_side("bottom", new float[][]{
                 new float[]{672, 305},
                 new float[]{1027, 432},
@@ -48,10 +37,10 @@ public class main {
 
         //print matrix
         int[][] matrix = cam.side.get("front").getIntArray();
-        for (int i=0;i<matrix.length;i++){
+        for (int i = 0; i < matrix.length; i++) {
 
-            for (int j=0; j<matrix[0].length;j++){
-                System.out.print(matrix[i][j]+" ");
+            for (int j = 0; j < matrix[0].length; j++) {
+                System.out.print(matrix[i][j] + " ");
             }
             System.out.println();
         }
@@ -59,10 +48,10 @@ public class main {
         System.out.println();
 
         int[][] matrix2 = cam.side.get("side").getIntArray();
-        for (int i=0;i<matrix2.length;i++){
+        for (int i = 0; i < matrix2.length; i++) {
 
-            for (int j=0; j<matrix2[0].length;j++){
-                System.out.print(matrix2[i][j]+" ");
+            for (int j = 0; j < matrix2[0].length; j++) {
+                System.out.print(matrix2[i][j] + " ");
             }
             System.out.println();
         }
@@ -70,10 +59,10 @@ public class main {
         System.out.println();
 
         int[][] matrix3 = cam.side.get("bottom").getIntArray();
-        for (int i=0;i<matrix2.length;i++){
+        for (int i = 0; i < matrix2.length; i++) {
 
-            for (int j=0; j<matrix3[0].length;j++){
-                System.out.print(matrix3[i][j]+" ");
+            for (int j = 0; j < matrix3[0].length; j++) {
+                System.out.print(matrix3[i][j] + " ");
             }
             System.out.println();
         }

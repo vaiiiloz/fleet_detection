@@ -1,6 +1,7 @@
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -72,7 +73,7 @@ public class Fleet_single_side {
                 new Point(rect[3][0], rect[3][1])
         );
 
-        //compute the perspective transform matrix and then apply it
+        //compute the perspective transform matrix and then wrap the image to new size
         Mat M = Imgproc.getPerspectiveTransform(src, dst);
         Mat warped = new Mat();
         Imgproc.warpPerspective(this.image, warped, M, new Size(maxWidth, maxHeight));
@@ -141,7 +142,7 @@ public class Fleet_single_side {
         //map condition
         for (int i = 0; i < num_x; i++) {
             for (int j = 0; j < num_y; j++) {
-                if ((mat[i][j] >= (mean - 0.5 * std)) && (mat[i][j] <= (mean + 3.0 * std)) && (mat[i][j]>stride_h*stride_w/16)) {
+                if ((mat[i][j] >= (mean - 0.5 * std)) && (mat[i][j] <= (mean + 3.0 * std)) && (mat[i][j] > stride_h * stride_w / 16)) {
                     mat[i][j] = 1;
                 } else {
                     mat[i][j] = 0;
@@ -203,46 +204,45 @@ public class Fleet_single_side {
 
         int idx = 0;
         //find index of topMost
-        for (int i=0;i<clockwise_pts.length;i++){
-            if (Arrays.equals(clockwise_pts[i], topMost)){
-                idx=i;
+        for (int i = 0; i < clockwise_pts.length; i++) {
+            if (Arrays.equals(clockwise_pts[i], topMost)) {
+                idx = i;
                 break;
             }
         }
 
         //sort topMost is the first element
         float[][] order_pts = new float[4][2];
-        if (idx!=0){
-            System.arraycopy(clockwise_pts, idx, order_pts, 0, clockwise_pts.length-idx);
-            System.arraycopy(clockwise_pts, 0, order_pts, clockwise_pts.length-idx, idx);
-        }else{
+        if (idx != 0) {
+            System.arraycopy(clockwise_pts, idx, order_pts, 0, clockwise_pts.length - idx);
+            System.arraycopy(clockwise_pts, 0, order_pts, clockwise_pts.length - idx, idx);
+        } else {
             order_pts = clockwise_pts;
         }
-
 
 
         // topMost is top-left
         if (Arrays.stream(leftMost).anyMatch(point -> {
             return Arrays.equals(point, topMost);
-        })){
+        })) {
             return order_pts;
-        }else{//topMost is top-right
-            float[] temp = order_pts[order_pts.length-1];
-            System.arraycopy(order_pts,0 , order_pts, 1, order_pts.length-1);
+        } else {//topMost is top-right
+            float[] temp = order_pts[order_pts.length - 1];
+            System.arraycopy(order_pts, 0, order_pts, 1, order_pts.length - 1);
             order_pts[0] = temp;
             return order_pts;
         }
 
     }
 
-    private float[][] sort_clockwise(float[][] pts){
+    private float[][] sort_clockwise(float[][] pts) {
         float[][] points = pts.clone();
         float sum_x = 0;
         float sum_y = 0;
         //cal sum x, sum y
-        for (int i=0;i<points.length;i++){
-            sum_x+=points[i][0];
-            sum_y+=points[i][1];
+        for (int i = 0; i < points.length; i++) {
+            sum_x += points[i][0];
+            sum_y += points[i][1];
         }
         final float centre_x = sum_x / points.length;
         final float centre_y = sum_y / points.length;
@@ -251,8 +251,8 @@ public class Fleet_single_side {
         Arrays.sort(points, new Comparator<float[]>() {
             @Override
             public int compare(float[] floats1, float[] floats2) {
-                return Double.compare(Math.atan2(floats1[1]-centre_y, floats1[0]-centre_x)
-                        , Math.atan2(floats2[1]-centre_y, floats2[0]-centre_x) );
+                return Double.compare(Math.atan2(floats1[1] - centre_y, floats1[0] - centre_x)
+                        , Math.atan2(floats2[1] - centre_y, floats2[0] - centre_x));
             }
         });
 

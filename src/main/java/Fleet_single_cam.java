@@ -1,18 +1,10 @@
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
-import org.w3c.dom.ls.LSOutput;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class Fleet_single_cam {
     private String id;
@@ -63,6 +55,7 @@ public class Fleet_single_cam {
         if (resize_ratio != 0) {
             Imgproc.resize(this.image, this.image, new Size(0, 0), resize_ratio, resize_ratio);
         }
+
         //save image if require
         if (show) {
             Imgcodecs.imwrite("cam_" + id + ".png", this.image);
