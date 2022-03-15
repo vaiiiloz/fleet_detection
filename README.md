@@ -1,2 +1,2 @@
-input: ảnh của mỗi cam, và 4 điểm/mặt (có 3 mặt/cam).  
+input: ảnh của mỗi cam, và 4 điểm/side. Mỗi  cam sẽ có 3 side. 4 điểm của mỗi side là 4 góc của side đó.  Side  là các mặt của khối thể tích cần tính.
 output: mỗi mặt trả về một  binary matrix, dùng  để tính diện tích vùng có giá trị 0.
