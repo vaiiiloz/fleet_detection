@@ -1,10 +1,13 @@
+import Entity.Point3D;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class Fleet_single_cam {
     private String id;
@@ -14,6 +17,7 @@ public class Fleet_single_cam {
     private int num_y;
     private int num_z;
     private boolean show;
+    private Point3D[] points;
     //    private
     HashMap<String, intArray> side;
 
@@ -30,6 +34,14 @@ public class Fleet_single_cam {
 
         public int[][] getIntArray() {
             return intArray.clone();
+        }
+
+        public int getWidth() {
+            return intArray[0].length;
+        }
+
+        public int getHeight() {
+            return intArray.length;
         }
 
         public void setIntArray(int[][] intArray) {
@@ -126,6 +138,73 @@ public class Fleet_single_cam {
         this.side.get("bottom").setIntArray(fill_matrix(bottom));
     }
 
+    /**
+     * Create list point3d from 3 side
+     */
+    public void initPoint3d() {
+        //init point list
+        List<Point3D> point3dList = new ArrayList<>();
+
+        //temp pixel
+        int xx = 0;
+        int yy = 0;
+        int zz = 0;
+
+        //get side front, side, bottom
+        int[][] front = this.side.get("front").getIntArray();
+        int[][] side = this.side.get("side").getIntArray();
+        int[][] bottom = this.side.get("bottom").getIntArray();
+        //add point 0 in side front
+        zz = num_z + 1;
+        yy = num_y + 1;
+        for (int i = 0; i < front.length; i++) {
+            zz -= 1;
+            xx = 0;
+            for (int j = 0; j < front[i].length; j++) {
+                xx += 1;
+                //add if point == 0
+                if (front[i][j] == 0) {
+                    point3dList.add(new Point3D(xx, yy, zz));
+                }
+            }
+        }
+
+        //add point 0 in side side
+        zz = num_z + 1;
+        xx = 0;
+        for (int i = 0; i < side.length; i++) {
+            zz -= 1;
+            yy = 0;
+            for (int j = 0; j < side[i].length; j++) {
+                yy += 1;
+                //add if point == 0
+                if (side[i][j] == 0) {
+                    point3dList.add(new Point3D(xx, yy, zz));
+                }
+            }
+        }
+
+        //add point 0 in side bottom
+        zz = 0;
+        yy = num_y + 1;
+        for (int i = 0; i < bottom.length; i++) {
+            yy -= 1;
+            xx = 0;
+            for (int j = 0; j < bottom[i].length; j++) {
+                xx += 1;
+                //add if point == 0
+                if (bottom[i][j] == 0) {
+                    point3dList.add(new Point3D(xx, yy, zz));
+                }
+            }
+        }
+
+        points = point3dList.toArray(new Point3D[point3dList.size()]);
+    }
+
+    public Point3D[] getPoints() {
+        return points;
+    }
 
     private int[][] padding(int[][] matrix, int require_height, int require_width) {
         //get width, height
@@ -159,7 +238,6 @@ public class Fleet_single_cam {
             }
 
         }
-
 
         return return_matrix;
 
