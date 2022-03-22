@@ -1,4 +1,5 @@
-import Entity.Point3D;
+
+import Entity.Point3d;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -17,7 +18,7 @@ public class Fleet_single_cam {
     private int num_y;
     private int num_z;
     private boolean show;
-    private Point3D[] points;
+    private Point3d[] points;
     //    private
     HashMap<String, intArray> side;
 
@@ -143,7 +144,7 @@ public class Fleet_single_cam {
      */
     public void initPoint3d() {
         //init point list
-        List<Point3D> point3dList = new ArrayList<>();
+        List<Point3d> point3dList = new ArrayList<>();
 
         //temp pixel
         int xx = 0;
@@ -164,7 +165,7 @@ public class Fleet_single_cam {
                 xx += 1;
                 //add if point == 0
                 if (front[i][j] == 0) {
-                    point3dList.add(new Point3D(xx, yy, zz));
+                    point3dList.add(new Point3d(xx, yy, zz));
                 }
             }
         }
@@ -179,7 +180,7 @@ public class Fleet_single_cam {
                 yy += 1;
                 //add if point == 0
                 if (side[i][j] == 0) {
-                    point3dList.add(new Point3D(xx, yy, zz));
+                    point3dList.add(new Point3d(xx, yy, zz));
                 }
             }
         }
@@ -194,18 +195,26 @@ public class Fleet_single_cam {
                 xx += 1;
                 //add if point == 0
                 if (bottom[i][j] == 0) {
-                    point3dList.add(new Point3D(xx, yy, zz));
+                    point3dList.add(new Point3d(xx, yy, zz));
                 }
             }
         }
 
-        points = point3dList.toArray(new Point3D[point3dList.size()]);
+        points = point3dList.toArray(new Point3d[point3dList.size()]);
     }
 
-    public Point3D[] getPoints() {
+    public Point3d[] getPoints() {
         return points;
     }
 
+
+    /**
+     * Adding 0 into matrix inorder to make the matrix fit the require height and width
+     * @param matrix
+     * @param require_height
+     * @param require_width
+     * @return
+     */
     private int[][] padding(int[][] matrix, int require_height, int require_width) {
         //get width, height
         int height = 0;

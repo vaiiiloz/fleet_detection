@@ -8,29 +8,29 @@ version '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
-ext{
+ext {
     version = [
-            'javacv' : '1.5.3',
-            'opencv' : '4.3.0',
+            'javacv': '1.5.3',
+            'opencv': '4.3.0',
     ]
 }
 
 dependencies {
-    List axisExGroups  = [ 'org.bytedeco.javacpp-presets']
-    List axisExModules = [ 'ffmpeg' , 'artoolkitplus', 'ffmpeg-platform']
+    List axisExGroups = ['org.bytedeco.javacpp-presets']
+    List axisExModules = ['ffmpeg', 'artoolkitplus', 'ffmpeg-platform', 'artoolkitplus-platform',
+                          'flandmark', 'flandmark-platform', 'flycapture', 'flycapture-platform',
+                            'leptonica', 'leptonica-platform', 'libdc1394', 'libdc1394-platform',
+                            'libfreenect2', 'libfreenect2-platform', 'libfreenect', 'libfreenect-platform',
+                          'librealsense2', 'librealsense2-platform', 'librealsense', 'librealsense-platform',
+                          'tesseract', 'tesseract-platform', 'videoinput', 'videoinput-platform','javacv', 'javacv-platform']
 
-    implementation('org.bytedeco:opencv:4.5.1-1.5.5:android-x86')
-    implementation('org.bytedeco:opencv:4.3.0-1.5.3:android-x86_64')
 
-    implementation(group :'org.bytedeco', name: 'javacv-platform', version: '1.5.5'){
-        axisExGroups.each  { exclude group: "$it" }
-        axisExModules.each {exclude module: "$it"}
+    implementation(group: 'org.bytedeco', name: 'javacv-platform', version: '1.5.5') {
+        axisExGroups.each { exclude group: "$it" }
+        axisExModules.each { exclude module: "$it" }
     }
-    implementation('org.apache.commons:commons-lang3:3.12.0')
 
 
-//    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-//    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
 test {

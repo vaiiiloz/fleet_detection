@@ -1,5 +1,8 @@
+
+import Entity.Point3d;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.opencv.opencv_java;
+import utils.QuickHull3D;
 
 import java.util.Arrays;
 
@@ -8,8 +11,11 @@ public class main {
 
         Loader.load(opencv_java.class);
 
-        //Khoi tạo 1 cam, nhận ảnh tĩnh vào
-        Fleet_single_cam cam1 = new Fleet_single_cam("a", "1da36bd1c4aa0bf452bb24.jpg", 0.5, 5, 5, 4, false);
+        int x = 5;
+        int y = 5;
+        int z = 4;
+        //Khoi tạo cam 1
+        Fleet_single_cam cam1 = new Fleet_single_cam("1", "1da36bd1c4aa0bf452bb24.jpg", 0.5, x, y, z, false);
 
         //create front side, add 4 đỉnh của side front vào
         cam1.add_side("front", new float[][]{
@@ -35,10 +41,12 @@ public class main {
                 new float[]{288, 545}
         });
 
+        //tính matrix thể tích vật
         cam1.refine_matrix();
+        //lấy những point chứa vật
         cam1.initPoint3d();
 
-        //Khoi tạo 1 cam, nhận ảnh tĩnh vào
+        //Khoi tạo cam2
         Fleet_single_cam cam2 = new Fleet_single_cam("a", "5b8ab6b219c9d6978fd827.jpg", 0.5, 5, 5, 4, false);
 
         //create front side, add 4 đỉnh của side front vào
@@ -65,32 +73,26 @@ public class main {
                 new float[]{275, 497}
         });
 
+        //tính matrix thể tích vật
         cam2.refine_matrix();
+        //lấy những point của vật thể
         cam2.initPoint3d();
 
 
+        // tổng hợp lại những point chứa vật trong 2 cam
+        Point3d[] poly = Arrays.copyOf(cam1.getPoints(), cam1.getPoints().length+cam2.getPoints().length);
+        System.arraycopy(cam2.getPoints(), 0, poly, cam1.getPoints().length, cam2.getPoints().length);
+
+        //dùng quick hull algorithm để tính thể tích
+        QuickHull3D hull = new QuickHull3D();
+        hull.build(poly);
+
+        //lấy thể tích của vật
+        double volume = hull.calVolume();
 
 
-//        Point3d[] poly = Arrays.copyOf(cam1.getPoints(), cam1.getPoints().length+cam2.getPoints().length);
-//        System.arraycopy(cam2.getPoints(), 0, poly, cam1.getPoints().length, cam2.getPoints().length);
-//
-//        QuickHull3D hull = new QuickHull3D();
-//        hull.build(poly);
-//        System.out.println("Vertices:");
-//        Point3d[] vertices = hull.getVertices();
-//        for (int i = 0; i < vertices.length; i++) {
-//            Point3d pnt = vertices[i];
-//            System.out.println(pnt.x + " " + pnt.y + " " + pnt.z);
-//        }
-//
-//        System.out.println("Faces:");
-//        int[][] faceIndices = hull.getFaces();
-//        for (int i = 0; i < vertices.length; i++) {
-//            for (int k = 0; k < faceIndices[i].length; k++) {
-//                System.out.print(faceIndices[i][k] + " ");
-//            }
-//            System.out.println("");
-//        }
+        //Kết quả trả ra: tỉ lệ thể tích
+        double result = volume/((x+1)*(y+1)*(z+1));
 
 
     }

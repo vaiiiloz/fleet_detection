@@ -6,14 +6,14 @@ public class FaceList {
     private Face tail;
 
     /**
-     * Clears this list
+     * Clears this list.
      */
     public void clear() {
         head = tail = null;
     }
 
     /**
-     * Adds a vertex to the end of this list
+     * Adds a vertex to the end of this list.
      */
     public void add(Face vtx) {
         if (head == null) {
@@ -30,7 +30,7 @@ public class FaceList {
     }
 
     /**
-     * Returns true if this list is empty
+     * Returns true if this list is empty.
      */
     public boolean isEmpty() {
         return head == null;
