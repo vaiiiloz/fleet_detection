@@ -971,7 +971,7 @@ public class QuickHull3D {
             Face face = (Face) it.next();
             avgPoint.add(face.getCentroid());
         }
-        avgPoint.scale(1 / faces.size());
+        avgPoint.scale((double) 1 / faces.size());
 
         //Initialise the volume
         double volume = 0;
