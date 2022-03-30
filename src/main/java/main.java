@@ -1,5 +1,6 @@
 
 import Entity.Point3d;
+import jdk.swing.interop.SwingInterOpUtils;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.opencv.opencv_java;
 import utils.QuickHull3D;
@@ -90,7 +91,7 @@ public class main {
         //lấy thể tích của vật
         double volume = hull.calVolume();
 
-
+        System.out.println(volume);
         //Kết quả trả ra: tỉ lệ thể tích
         double result = volume/((x+1)*(y+1)*(z+1));
 
